@@ -1,6 +1,13 @@
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/bt.h>
+#include <dt-bindings/zmk/outputs.h>
+#include <dt-bindings/zmk/reset.h>
+#include <dt-bindings/zmk/ext_power.h>
+
+#define DEFAULT 0
+#define BT      1
+#define PKR     2
 
 / {
 	keymap {
@@ -8,30 +15,51 @@
 
 		default_layer {
 				// ------------------------------------------------------------------------------------------
-				// | ESC |  1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |  9  |  0  |  -  |  =  |   BKSP   | DEL
-				// | TAB  |  Q  |  W  |  E  |  R  |  T  |  Y  |  U  |  I  |  O  |  P  |  [  |  ]  |   |    |
-				// | CAPS  |  A  |  S  |  D  |  F  |  G  |  H  |  J  |  K  |  L  |  ;  |  '  |     ENTER    |
-				// |  SHIFT    |  Z  |  X  |  C  |  V  |  B  |  N  |  M  |  ,  |  .  | /   |      SHIFT     |
-				// |  CTL  |  WIN  |  ALT  |            SPACE               | ALT | 1    |  MENU    |  CTRL    |
+				// | ESC |  1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |  9  |  0  |  -  |  =  |   BKSP   |
+				// | TAB  |  Q  |  W  |  E  |  R  |  T  |  Y  |  U  |  I  |  O  |  P  |  [  |  ]  |   "|"   |
+				// | MO(2) |  A  |  S  |  D  |  F  |  G  |  H  |  J  |  K  |  L  |  ;  |  '  |     ENTER    |
+				// |  SHIFT  |  Z  |  X  |  C  |  V  |  B  |  N  |  M  |  ,  |  .  |  /  |      SHIFT       |
+				// |  CTL  |  WIN  |  ALT  |            SPACE              |  ALT  |  WIN  |  MO(1) |  CTL  |
 				// ------------------------------------------------------------------------------------------
 			bindings = <
-				&kp ESC &kp N1 &kp N2 &kp N3 &kp N4 &kp N5 &kp N6 &kp N7 &kp  N8   &kp  N9 &kp  N0  &kp MINUS &kp EQUAL &kp BSPC &bt BT_CLR
-				&kp TAB  &kp Q  &kp W  &kp E  &kp R  &kp T  &kp Y  &kp U  &kp  I    &kp  O  &kp  P   &kp LBKT &kp RBKT  &kp BSLH
-				&kp CLCK  &kp A  &kp S  &kp D  &kp F  &kp G  &kp H  &kp J  &kp  K    &kp  L  &kp SEMI &kp SQT           &kp RET
-				&kp LSHFT  &kp Z  &kp X  &kp C  &kp V  &kp B  &kp N  &kp M  &kp COMMA &kp DOT &kp FSLH             &kp RSHFT
-				&kp LCTRL &kp LGUI &kp LALT            &kp SPACE                          &kp RALT  &mo 1 &kp K_CMENU &kp RCTRL
+				&gresc    &kp N1   &kp N2 &kp N3 &kp N4 &kp N5 &kp N6 &kp N7 &kp  N8   &kp  N9  &kp  N0  &kp MINUS &kp EQUAL &kp BSPC   &bt BT_CLR
+				&kp TAB   &kp Q    &kp W  &kp E  &kp R  &kp T  &kp Y  &kp U  &kp  I    &kp  O   &kp  P   &kp LBKT &kp RBKT   &kp BSLH
+				&mo PKR   &kp A    &kp S  &kp D  &kp F  &kp G  &kp H  &kp J  &kp  K    &kp  L   &kp SEMI &kp SQT             &kp RET
+				&kp LSHFT &kp Z    &kp X  &kp C  &kp V  &kp B  &kp N  &kp M  &kp COMMA &kp DOT  &kp FSLH                     &kp RSHFT
+				&kp LCTRL &kp LGUI &kp LALT            &kp SPACE                                    &kp RALT &kp RGUI &mo BT &kp RCTRL
 			>;
-			sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
 		};
-		raise {
+		bt_layer {
+				// ------------------------------------------------------------------------------------------------
+				// | BT CLR | F1  | F2  | F3  | F4  | F5  | F6  | F7  | F8  | F9  | F10  | F11 | F12 |     DEL    |
+				// |  BT 1   | TOG |  UP  |    |     |     |     |     |     |     |      |     |     |           |
+				// |   BT 2   |  LT  |  DN  |  RT  |     |     |     |      |     |     |     |      | BOOTLOADER |
+				// |    BT 3     |     |      |      |     |     |     |     |     |     |     |                  |
+				// |   BT 4  |      |      |                                    |         |       |       |       |
+				// ------------------------------------------------------------------------------------------------
 			bindings = <
-				&kp GRAVE &kp F1 &kp F2 &kp F3 &kp F4 &kp F5 &kp F6 &kp F7 &kp  F8   &kp  F9 &kp  F10  &kp F11 &kp F12   &kp DEL &trans
-				&trans &trans &kp UP &trans &trans &trans &trans &trans &kp INS &trans &kp PSCRN &kp SLCK &kp PAUSE_BREAK &reset
-				&trans    &kp LEFT &kp DOWN &kp RIGHT &trans &trans &trans &trans &trans &trans &kp HOME  &kp PG_UP   &bootloader
-				&kp C_PREV &kp C_VOL_DN &kp C_VOL_UP &kp C_MUTE &trans &trans &trans &trans &trans &kp END &kp PG_DN  &kp C_NEXT
-				&bt BT_PRV &bt BT_NXT  &trans              &trans                            &trans   &trans   &trans &bt BT_CLR
+				&bt BT_CLR   &kp F1       &kp F2   &kp F3    &kp F4 &kp F5 &kp F6 &kp F7 &kp F8  &kp F9 &kp F10 &kp F11 &kp F12 &kp DEL      &trans
+				&bt BT_SEL 0 &out OUT_TOG &kp UP   &trans    &trans &trans &trans &trans &trans  &trans &trans  &trans  &trans  &reset
+				&bt BT_SEL 1 &kp LEFT     &kp DOWN &kp RIGHT &trans &trans &trans &trans &trans  &trans &trans  &trans          &bootloader
+				&bt BT_SEL 2 &trans       &trans   &trans    &trans &trans &trans &trans &trans  &trans &trans                  &trans
+				&bt BT_SEL 3 &trans       &trans             &trans                                     &trans  &trans  &trans  &trans
 			>;
-			sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
+		};
+		poker_layer {
+				// ------------------------------------------------------------------------------------------
+				// |  ~  |  F1  | F2  | F3  | F4  | F5  | F6  | F7  | F8  | F9  | F10  | F11 | F12 |   DEL  |
+				// |      |     |     | END |     |     |     | INS |  UP | PG_UP | PG_DN |     |    |      |
+				// |       |     |     |     |     |     | HOME| LEFT | DOWN | RIGHT |     |     |          |
+				// |         |     |     |     |     |     |     |     |     |     |     |                  |
+				// |       |       |       |                               |       |       |        |       |
+				// ------------------------------------------------------------------------------------------
+			bindings = <
+				&kp GRAVE &kp F1  &kp F2  &kp F3  &kp F4  &kp F5  &kp F6    &kp F7    &kp F8    &kp F9     &kp F10    &kp F11  &kp F12  &kp DEL  &trans
+				&trans    &trans  &trans  &kp END &trans  &trans  &trans    &kp INS   &kp UP    &kp PG_UP  &trans     &trans   &trans   &trans
+				&trans    &trans  &trans  &trans  &trans  &trans  &kp HOME  &kp LEFT  &kp DOWN  &kp RIGHT  &kp PG_DN  &trans   &trans
+				&trans    &trans  &trans  &trans  &trans  &trans  &trans    &trans    &trans    &trans     &trans     &trans
+				&trans    &trans  &trans  &trans  &trans  &trans  &trans    &trans
+			>;
 		};
 	};
 };
