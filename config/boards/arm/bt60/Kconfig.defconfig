@@ -1,9 +1,6 @@
 # Copyright (c) 2021 Polarity Works
 # SPDX-License-Identifier: MIT
 
-# directly output UF2
- CONFIG_BUILD_OUTPUT_UF2=y
- 
 if BOARD_BT60
 
 config BOARD
